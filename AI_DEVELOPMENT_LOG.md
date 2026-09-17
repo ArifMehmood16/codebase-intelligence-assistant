@@ -2767,6 +2767,51 @@ The repository is intended to become a public portfolio project. The developer a
 - Run `make security` with Docker available.
 - Choose a licence and optionally rename the GitHub repository to match the product.
 
+## Entry 060 — Publish a clean-history public repository
+
+**Date:** 2026-09-17
+**Phase/task:** User-requested public repository publication
+**Tool/model:** Codex
+**Status:** completed
+
+### Objective
+
+Publish the sanitized project as a new public GitHub repository without exposing the private source repository's earlier history.
+
+### AI contribution
+
+- Confirmed the source repository remained private and the target repository name was available.
+- Exported the reviewed sanitization commit as a tracked-file snapshot with no inherited `.git` data.
+- Initialized a new `main` history and used the developer's GitHub no-reply author address.
+- Created and pushed the public `codebase-intelligence-assistant` repository.
+- Added accurate technology topics for discoverability.
+
+### Verification performed
+
+- The public repository reports `PUBLIC` visibility and `main` as its default branch.
+- The initial public history contains one root commit, `bf14e39`, with 185 tracked files.
+- The pushed `main` ref matched local commit `bf14e3902c3ce98732afbcba61aecc393ea323a8` before this publication-log follow-up.
+- The published tree contains neither the removed source brief nor local `.env` files.
+- The root commit author uses `59412791+ArifMehmood16@users.noreply.github.com`.
+
+### Security, quality and limitations
+
+- The original repository and its historical sensitive references remain private and were not connected to the public remote.
+- The public repository contains only the sanitized snapshot and subsequent public-safe commits.
+- A full Docker-based Gitleaks scan remains outstanding because Docker Desktop was unavailable.
+- No open-source licence was added; that decision remains with the developer.
+
+### Evidence
+
+- Repository: `https://github.com/ArifMehmood16/codebase-intelligence-assistant`
+- Initial public root commit: `bf14e39`
+- Publication-log commit: the commit containing this entry.
+
+### Follow-up
+
+- Run `make security` when Docker is available.
+- Choose and add a licence if reuse permissions should be granted.
+
 ## Entry template
 
 Copy this section for each meaningful AI-assisted task.
