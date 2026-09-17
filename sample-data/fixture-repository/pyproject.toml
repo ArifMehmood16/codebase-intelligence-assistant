@@ -1,0 +1,5 @@
+[project]
+name = "fixture-inventory"
+version = "0.1.0"
+description = "Synthetic inventory fixture"
+dependencies = ["pydantic>=2"]

@@ -1,0 +1,10 @@
+# Application settings for the fixture inventory service.
+# Values are synthetic and safe to index.
+
+[server]
+host = "127.0.0.1"
+port = 8080
+
+[inventory]
+max_name_length = 64
+default_page_size = 20

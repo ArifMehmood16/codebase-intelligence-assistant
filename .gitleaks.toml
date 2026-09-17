@@ -1,0 +1,19 @@
+# Scan the working tree, but skip local secrets, caches and installed trees.
+title = "codebase-assistant"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Local env copies, caches and installed dependency trees"
+paths = [
+  '''(^|/)config/app\.env$''',
+  '''(^|/)\.venv/''',
+  '''(^|/)node_modules/''',
+  '''(^|/)\.git/''',
+  '''(^|/)\.pytest_cache/''',
+  '''(^|/)\.mypy_cache/''',
+  '''(^|/)\.ruff_cache/''',
+  '''(^|/)frontend/coverage/''',
+  '''(^|/)coverage\.xml$''',
+]

@@ -1,0 +1,37 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+config/app.env
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+dist/
+build/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/coverage/
+frontend/.vite/
+playwright-report/
+test-results/
+blob-report/
+
+# Local demo archives (not part of the product)
+tmp/
+
+# OS and editor
+.DS_Store
+.idea/

@@ -1,0 +1,69 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-codebase}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-codebase}
+      POSTGRES_DB: ${POSTGRES_DB:-codebase}
+    ports:
+      - "${POSTGRES_HOST_PORT:-5433}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-codebase} -d ${POSTGRES_DB:-codebase}"]
+      interval: 2s
+      timeout: 5s
+      retries: 20
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "${OLLAMA_HOST_PORT:-11434}:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-codebase}:${POSTGRES_PASSWORD:-codebase}@db:5432/${POSTGRES_DB:-codebase}
+      CORS_ALLOW_ORIGIN: ${CORS_ALLOW_ORIGIN:-http://localhost:3000}
+      OLLAMA_HOST: http://ollama:11434
+      OLLAMA_CHAT_MODEL: ${OLLAMA_CHAT_MODEL:-llama3.2}
+      OLLAMA_EMBED_MODEL: ${OLLAMA_EMBED_MODEL:-nomic-embed-text}
+      OLLAMA_TIMEOUT_SECONDS: ${OLLAMA_TIMEOUT_SECONDS:-30}
+      OLLAMA_EMBED_BATCH_SIZE: ${OLLAMA_EMBED_BATCH_SIZE:-16}
+      EMBEDDING_PROVIDER: ${EMBEDDING_PROVIDER:-lexical}
+      COMPLETION_PROVIDER: ${COMPLETION_PROVIDER:-extractive}
+      LLM_TEMPERATURE: ${LLM_TEMPERATURE:-0.0}
+      LLM_MAX_OUTPUT_TOKENS: ${LLM_MAX_OUTPUT_TOKENS:-1024}
+      LLM_MAX_RETRIES: ${LLM_MAX_RETRIES:-2}
+      MAX_QUESTION_CHARS: ${MAX_QUESTION_CHARS:-2000}
+      MAX_CONTEXT_CHARS: ${MAX_CONTEXT_CHARS:-12000}
+      MAX_EXCERPT_CHARS: ${MAX_EXCERPT_CHARS:-2000}
+      MAX_ARCHIVE_BYTES: ${MAX_ARCHIVE_BYTES:-10485760}
+      MAX_ARCHIVE_FILE_COUNT: ${MAX_ARCHIVE_FILE_COUNT:-500}
+      MAX_ARCHIVE_FILE_BYTES: ${MAX_ARCHIVE_FILE_BYTES:-1048576}
+      MAX_ARCHIVE_EXTRACTED_BYTES: ${MAX_ARCHIVE_EXTRACTED_BYTES:-20971520}
+      MAX_ARCHIVE_COMPRESSION_RATIO: ${MAX_ARCHIVE_COMPRESSION_RATIO:-100}
+    ports:
+      - "${API_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      ollama:
+        condition: service_started
+
+  frontend:
+    build:
+      context: ./frontend
+    environment:
+      VITE_API_BASE_URL: ${VITE_API_BASE_URL:-http://localhost:8000}
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  ollama_data:
